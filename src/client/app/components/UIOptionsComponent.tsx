@@ -85,7 +85,7 @@ class UIOptionsComponent extends React.Component<UIOptionsPropsWithIntl, UIOptio
 				<ChartDataSelectContainer />
 
 				{/* Controls specific to the bar chart. */}
-				{this.props.chartToRender === ChartTypes.bar &&
+				{this.props.chartToRender === ChartTypes.bar  &&
 					<div>
 						<div className='checkbox'>
 							<input type='checkbox' onChange={this.handleChangeBarStacking} checked={this.props.barStacking} id='barStacking' />
@@ -210,6 +210,61 @@ class UIOptionsComponent extends React.Component<UIOptionsPropsWithIntl, UIOptio
 				}
 
 				{this.props.chartToRender === ChartTypes.map &&
+				<div> 
+					<p style={labelStyle}>
+					<FormattedMessage id='bar.interval' />:
+				</p>
+				<ButtonGroup
+					style={zIndexFix}
+				>
+					<Button
+						// outline={this.state.barDurationDays !== 1}
+						onClick={() => this.handleBarButton(1)}
+					>
+						<FormattedMessage id='day' />
+					</Button>
+					<Button
+						// outline={this.state.barDurationDays !== 7}
+						onClick={() => this.handleBarButton(7)}
+					>
+						<FormattedMessage id='week' />
+					</Button>
+					<Button
+						// outline={this.state.barDurationDays !== 28}
+						onClick={() => this.handleBarButton(28)}
+					>
+						<FormattedMessage id='4.weeks' />
+					</Button>
+				</ButtonGroup>
+				<TooltipMarkerComponent page='home' helpTextId='help.home.bar.interval.tip' />
+				<Button
+					// outline={!this.state.showSlider}
+					onClick={this.toggleSlider}
+				>
+					<FormattedMessage id='toggle.custom.slider' />
+				</Button>
+				<TooltipMarkerComponent page='home' helpTextId='help.home.bar.custom.slider.tip' />
+				{/* {this.state.showSlider &&
+					<div style={divTopPadding}>
+						<Slider
+							min={1}
+							max={365}
+							value={this.state.barDurationDays}
+							onChange={this.handleBarDurationChange}
+							onAfterChange={this.handleBarDurationChangeComplete}
+							tipFormatter={this.formatSliderTip}
+							trackStyle={{ backgroundColor: 'gray', height: 10 }}
+							handleStyle={[{
+								height: 28,
+								width: 28,
+								marginLeft: -14,
+								marginTop: -9,
+								backgroundColor: 'white'
+							}]}
+							railStyle={{ backgroundColor: 'gray', height: 10 }}
+						/>
+					</div> } */}
+				</div> && 
 					<MapChartSelectContainer />
 				}
 
