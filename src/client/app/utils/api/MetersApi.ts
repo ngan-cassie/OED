@@ -22,7 +22,7 @@ export default class MetersApi {
 		return await this.backend.doGetRequest<NamedIDItem[]>('/api/meters');
 	}
 
-	public async lineReadingsCount(meterIDs:number[], timeInterval: TimeInterval):Promise<number> {
+	public async lineReadingsCount(meterIDs: number[], timeInterval: TimeInterval): Promise<number> {
 		const stringifiedIDs = meterIDs.join(',');
 		return await this.backend.doGetRequest<number>(
 			`/api/readings/line/count/meters/${stringifiedIDs}`,
@@ -54,10 +54,33 @@ export default class MetersApi {
 		);
 	}
 
+	public async create(meter: MeterMetadata): Promise<{}> {
+		return await this.backend.doPostRequest<MeterMetadata>(
+			'/api/meters/create',
+			{
+				name: meter.name,
+				identifier: meter.identifier,
+				ipAddress: meter.ipAddress,
+				meterType: meter.meterType,
+				enabled: meter.enabled,
+				displayable: meter.displayable,
+				timeZone: meter.timeZone,
+				gps: meter.gps
+			}
+		);
+	}
 	public async edit(meter: MeterMetadata): Promise<{}> {
 		return await this.backend.doPostRequest<MeterEditData>(
 			'/api/meters/edit',
-			{ id: meter.id, identifier: meter.identifier, enabled: meter.enabled, displayable: meter.displayable, timeZone: meter.timeZone, gps: meter.gps }
+			{
+				id: meter.id,
+				identifier: meter.identifier,
+				meterType: meter.meterType,
+				enabled: meter.enabled,
+				displayable: meter.displayable,
+				timeZone: meter.timeZone,
+				gps: meter.gps
+			}
 		);
 	}
 

@@ -198,5 +198,61 @@ router.post('/edit', requiredAdmin('edit meters'), async (req, res) => {
 	}
 });
 
+router.post('/create', requiredAdmin('create a new meter'), async (req, res) => {
+	const validParams = {
+		type: 'object',
+		required: ['name', 'enabled', 'displayable'],
+		properties: {
+			name: {type: 'string'},
+			enabled: { type: 'bool' },
+			displayable: { type: 'bool' },
+			timeZone: {
+				oneOf: [
+					{ type: 'string' },
+					{ type: 'null' }
+				]
+			},
+			gps: {
+				oneOf: [
+					{
+						type: 'object',
+						required: ['latitude', 'longitude'],
+						properties: {
+							latitude: { type: 'number', minimum: '-90', maximum: '90' },
+							longitude: { type: 'number', minimum: '-180', maximum: '180' }
+						}
+					},
+					{ type: 'null' }
+				]
+			},
+			identifier: {
+				oneOf: [
+					{ type: 'string' },
+					{ type: 'null' }
+				]
+			}
+		}
+	};
+	const validatorResult = validate(req.body, validParams);
+	if (!validatorResult.valid) {
+		log.warn(`Got request to create a new meter with invalid meter data, errors:${validatorResult.errors}`);
+		res.status(400);
+	} else {
+		const conn = getConnection();
+		try {
+			await conn.tx(async t => {
+				const {name, ipAddress, meterType, enabled, displayable, timeZone, gps, identifier} = req.body;
+				const newGPS = gps ? new Point(gps.longitude, gps.latitude) : null;
+				const meter = new Meter(undefined, name, ipAddress, enabled, displayable, meterType, timeZone, newGPS, identifier);
+				meter.insert(conn);
+			})
+			res.status(200).json({ message: `Successfully create a new meter ${req.body.id}` });
+		} catch (err) {
+			log.error('Failed to create a meter', err);
+			res.status(500).json({ message: 'Unable to edit meters.', err });
+		}
+	}
+
+})
 module.exports = router;
 

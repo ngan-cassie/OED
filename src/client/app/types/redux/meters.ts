@@ -55,6 +55,13 @@ export interface MeterMetadata {
 	gps?: GPSPoint;
 }
 
+// export enum MeterTypes {
+// 	other = 'other',
+// 	mamac = 'mamac',
+// 	metasys = 'metasys',
+// 	obvius = 'obvius'
+// }
+
 export interface MeterMetadataByID {
 	[meterID: number]: MeterMetadata;
 }

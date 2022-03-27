@@ -63,3 +63,10 @@ export enum UserRole {
 	EXPORT = 'export',
 	OBVIUS = 'obvius'
 };
+
+export enum MeterTypes {
+	MAMAC = 'mamac',
+	METASYS = 'metasys',
+	OBVIUS = 'obvius',
+	OTHER = 'other'
+}

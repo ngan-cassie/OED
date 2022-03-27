@@ -13,6 +13,7 @@ import TooltipHelpContainerAlternative from '../../containers/TooltipHelpContain
 import UnsavedWarningContainer from '../../containers/UnsavedWarningContainer';
 import { removeUnsavedChanges } from '../../actions/unsavedWarning';
 import store from '../../index';
+import CreateMeterLinkButtonComponent from './CreateMeterLinkButtonComponent';
 
 interface MetersDetailProps {
 	loggedInAsAdmin: boolean;
@@ -22,7 +23,7 @@ interface MetersDetailProps {
 	submitEditedMeters(): Promise<any>;
 }
 
-export default class MetersDetailComponent extends React.Component<MetersDetailProps, {}> {
+export default class MetersDetailComponent extends React.Component<MetersDetailProps> {
 	constructor(props: MetersDetailProps) {
 		super(props);
 		this.handleSubmitClicked = this.handleSubmitClicked.bind(this);
@@ -54,7 +55,7 @@ export default class MetersDetailComponent extends React.Component<MetersDetailP
 		const tooltipStyle = {
 			display: 'inline',
 			fontSize: '50%',
-			tooltipMeterView: loggedInAsAdmin? 'help.admin.meterview' : 'help.meters.meterview'
+			tooltipMeterView: loggedInAsAdmin ? 'help.admin.meterview' : 'help.meters.meterview'
 		};
 
 		return (
@@ -70,34 +71,39 @@ export default class MetersDetailComponent extends React.Component<MetersDetailP
 						</div>
 					</h2>
 					<div style={tableStyle}>
-					<Table striped bordered hover>
-					<thead>
-						<tr>
-						{loggedInAsAdmin && <th> <FormattedMessage id='meter.id' /> </th>}
-						{loggedInAsAdmin && <th> <FormattedMessage id='meter.name' /> </th>}
-						<th> <FormattedMessage id='meter.identifier' /> </th>
-						{loggedInAsAdmin && <th> <FormattedMessage id='meter.type' /> </th>}
-						{loggedInAsAdmin && <th> <FormattedMessage id='meter.ip'/> </th>}
-						{loggedInAsAdmin && <th> <FormattedMessage id='meter.gps'/> </th>}
-						<th> <FormattedMessage id='meter.enabled' /> </th>
-						<th> <FormattedMessage id='meter.displayable' /> </th>
-						{loggedInAsAdmin && <th> <FormattedMessage id='meter.time.zone' /> </th>}
-						</tr>
-					</thead>
-					<tbody>
-					{ this.props.meters.map(meterID =>
-						( <MeterViewContainer key={meterID} id={meterID} /> ))}
-					</tbody>
-					</Table>
+						<Table striped bordered hover>
+							<thead>
+								<tr>
+									{loggedInAsAdmin && <th> <FormattedMessage id='meter.id' /> </th>}
+									{loggedInAsAdmin && <th> <FormattedMessage id='meter.name' /> </th>}
+									<th> <FormattedMessage id='meter.identifier' /> </th>
+									{loggedInAsAdmin && <th> <FormattedMessage id='meter.type' /> </th>}
+									{loggedInAsAdmin && <th> <FormattedMessage id='meter.ip' /> </th>}
+									{loggedInAsAdmin && <th> <FormattedMessage id='meter.gps' /> </th>}
+									<th> <FormattedMessage id='meter.enabled' /> </th>
+									<th> <FormattedMessage id='meter.displayable' /> </th>
+									{loggedInAsAdmin && <th> <FormattedMessage id='meter.time.zone' /> </th>}
+								</tr>
+							</thead>
+							<tbody>
+								{loggedInAsAdmin && this.props.meters.map(meterID =>
+									(<MeterViewContainer key={meterID} id={meterID} />))}
+								<tr>
+									<td colSpan={8}>
+										{loggedInAsAdmin && <CreateMeterLinkButtonComponent />}
+									</td>
+								</tr>
+							</tbody>
+						</Table>
 					</div>
-					{ loggedInAsAdmin && <Button
+					{loggedInAsAdmin && <Button
 						color='success'
 						style={buttonContainerStyle}
 						disabled={!this.props.unsavedChanges}
 						onClick={this.handleSubmitClicked}
 					>
 						<FormattedMessage id='save.meter.edits' />
-					</Button> }
+					</Button>}
 				</div>
 				<FooterContainer />
 			</div>

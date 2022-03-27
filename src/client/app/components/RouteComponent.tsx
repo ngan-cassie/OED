@@ -25,6 +25,7 @@ import EditGroupsContainer from '../containers/groups/EditGroupsContainer';
 import CreateGroupContainer from '../containers/groups/CreateGroupContainer';
 import GroupsDetailContainer from '../containers/groups/GroupsDetailContainer';
 import MetersDetailContainer from '../containers/meters/MetersDetailContainer';
+import CreateMeterContainer from '../containers/meters/CreateMeterContainer'
 import UsersDetailContainer from '../containers/admin/UsersDetailContainer';
 import CreateUserContainer from '../containers/admin/CreateUserContainer';
 import { TimeInterval } from '../../../common/TimeInterval';
@@ -242,6 +243,7 @@ export default class RouteComponent extends React.Component<RouteProps, {}> {
 								<Route path='/admin' render={() => this.requireAuth(AdminComponent())}/>
 								<Route path='/csv' render={() => this.requireRole(UserRole.CSV, <UploadCSVContainer/>)}/>
 								<Route path='/groups' render={() => this.checkAuth(<GroupsDetailContainer/>)}/>
+								<Route path='/meters/new' render={() => this.requireAuth(<CreateMeterContainer/>)}/>
 								<Route path='/meters' render={() => this.checkAuth(<MetersDetailContainer/>)}/>
 								<Route path='/graph' render={({ location }) => this.linkToGraph(<HomeComponent/>, location.search)}/>
 								<Route path='/calibration' render={() => this.requireAuth(<MapCalibrationContainer/>)}/>

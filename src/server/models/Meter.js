@@ -229,16 +229,26 @@ class Meter {
 	readings(conn) {
 		return Reading.getAllByMeterID(this.id, conn);
 	}
+
+	async insert(conn) {
+		const meter = this;
+		if (meter.id !== undefined) {
+			throw new Error('Attempt to insert a map that already has an ID');
+		}
+		const resp = await conn.one(sqlFile('meter/insert_new_meter.sql'), meter);
+		// resp = { id: 42 }, hence this line
+		this.id = resp.id;
+	}
 }
 
 // Enum of meter types
-Meter.type = {
+Meter.type = Object.freeze({
 	MAMAC: 'mamac',
 	METASYS: 'metasys',
 	OBVIUS: 'obvius',
 	// Other is used when set by OED due to automatic creation and unknown.
 	// Can also be used by others when needed.
 	OTHER: 'other'
-};
+});
 
 module.exports = Meter;
